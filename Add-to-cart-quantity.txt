@@ -1,0 +1,53 @@
+header================
+<span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+        <div class="cart_items_show">
+        {%- if cart != empty -%}
+          <div class="cart-count-bubble">
+            {%- if cart.item_count < 100 -%}
+              <span aria-hidden="true">{{ cart.item_count }}</span>
+            {%- endif -%}
+            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+          </div>
+        {%- endif -%}
+  </div>
+
+=============================
+
+$(document).on("click","#ButtonAddToCart" ,function(){
+var button = $(this)
+
+var get_id_this = $(this).attr('value');
+console.log(get_id_this);
+$.ajax({
+type: 'POST',
+url: '/cart/add.js',
+data: {
+quantity:1,
+id: get_id_this
+},
+dataType: 'json',
+success: function() {
+
+    button.text('Added!');
+
+$.ajax({
+        type: 'GET',
+        url: '/cart.js',
+        dataType: 'json',
+        success: function(cart) {
+        console.log(cart);
+          var quant = cart.item_count;
+
+           var html ='<div class="cart-count-bubble"><span aria-hidden="true">'+quant+'</span> </div>'
+          $('.cart_items_show').html(html);
+        }
+      });
+  
+setTimeout(function(){
+
+}, 2000);
+}
+});
+
+
+});
