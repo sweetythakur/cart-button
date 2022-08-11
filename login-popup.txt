@@ -1,0 +1,267 @@
+
+<div class="popup-btn">
+<!-- Change the text below to what you need it to be -->
+
+</div>
+<div class="popup-overlay">
+<div class="popup">
+  <section data-section-id="login" data-section-type="login">
+  <div class="Container login_form">
+    <div class="PageContent PageContent--fitScreen PageContent--extraNarrow">
+      {%- assign is_recover_active = false -%}
+
+      {%- form 'recover_customer_password' -%}
+        {%- if form.errors or form.posted_successfully? -%}
+          {%- assign is_recover_active = true -%}
+        {%- endif -%}
+      {%- endform -%}
+
+      {%- comment -%}
+      --------------------------------------------------------------------------------------------------------------------
+      CUSTOMER LOGIN FORM
+      --------------------------------------------------------------------------------------------------------------------
+      {%- endcomment -%}
+
+      {%- if is_recover_active -%}
+        {%- assign login_default_visibility = 'display: none' -%}
+      {%- else -%}
+        {%- assign login_default_visibility = 'display: block' -%}
+      {%- endif -%}
+
+      {%- form 'customer_login', name: 'login', class: 'Form Form--spacingTight', id: 'customer_login', style: login_default_visibility -%}
+        <header class="Form__Header">
+          <h1 class="Form__Title Heading u-h1">{{ 'customer.login.title' | t }}</h1>
+          <p class="Form__Legend">{{ 'customer.login.description' | t }}</p>
+        </header>
+
+        {%- if form.errors -%}
+          <p class="Form__Alert Alert Alert--error">
+            {{- form.errors.messages['form'] -}}
+          </p>
+        {%- endif -%}
+
+        <div class="Form__Item">
+          <input type="email" class="Form__Input" name="customer[email]" required="required" placeholder="{{ 'customer.login.email' | t }}" aria-label="{{ 'customer.login.email' | t }}" autofocus>
+          <label class="Form__FloatingLabel">{{ 'customer.login.email' | t }}</label>
+        </div>
+
+        <div class="Form__Item">
+          <input type="password" class="Form__Input" name="customer[password]" required="required" placeholder="{{ 'customer.login.password' | t }}" aria-label="{{ 'customer.login.password' | t }}">
+          <label class="Form__FloatingLabel">{{ 'customer.login.password' | t }}</label>
+          <button type="button" class="Form__ItemHelp Link Link--primary" data-action="toggle-recover-form">{{ 'customer.login.forgot' | t }}</button>
+        </div>
+
+        <button type="submit" class="Form__Submit Button Button--primary Button--full">{{ 'customer.login.submit' | t }}</button>
+
+        <div class="Form__Hint Form__Hint--center">
+          <span class="Text--subdued">{{ 'customer.login.register_label' | t }}</span>
+          <span class=" button-custom Link Link--secondary">{{ 'customer.login.register_link' | t }}</span>
+        </div>
+      {%- endform -%}
+
+      {%- comment -%}
+      --------------------------------------------------------------------------------------------------------------------
+      CUSTOMER RECOVERY FORM
+      --------------------------------------------------------------------------------------------------------------------
+      {%- endcomment -%}
+
+      {%- if is_recover_active -%}
+        {%- assign recover_default_visibility = 'display: block' -%}
+      {%- else -%}
+        {%- assign recover_default_visibility = 'display: none' -%}
+      {%- endif -%}
+
+      {%- form 'recover_customer_password', name: 'recover', class: 'Form Form--spacingTight', id: 'recover_customer_password', style: recover_default_visibility -%}
+        <header class="Form__Header">
+          <h1 class="Form__Title Heading u-h1">{{ 'customer.recover_password.title' | t }}</h1>
+
+          {%- unless form.posted_successfully? -%}
+            <p class="Form__Legend">{{ 'customer.recover_password.description' | t }}</p>
+          {%- endunless -%}
+        </header>
+
+        {%- if form.errors -%}
+          <p class="Form__Alert Alert Alert--error">
+            {{- form.errors.messages['form'] -}}
+          </p>
+        {%- endif -%}
+
+        {%- if form.posted_successfully? -%}
+          <p class="Form__Alert Alert Alert--success">
+            {{- 'customer.recover_password.success' | t -}}
+          </p>
+        {%- endif -%}
+
+        <div class="Form__Item">
+          <input type="email" class="Form__Input" name="email" required="required" placeholder="{{ 'customer.recover_password.email' | t }}" aria-label="{{ 'customer.recover_password.email' | t }}" autofocus>
+          <label class="Form__FloatingLabel">{{ 'customer.recover_password.email' | t }}</label>
+        </div>
+
+        <button type="submit" class="Form__Submit Button Button--primary Button--full">{{ 'customer.recover_password.submit' | t }}</button>
+
+        <div class="Form__Hint Form__Hint--center">
+          <span class="Text--subdued">{{ 'customer.recover_password.login_label' | t }}</span>
+          <button type="button" class="Link Link--secondary" data-action="toggle-recover-form">{{ 'customer.recover_password.login_link' | t }}</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+
+<div class="Container popup-custom" style="display:none">
+    <div class="PageContent PageContent--fitScreen PageContent--extraNarrow">
+      {%- form 'create_customer', name: 'create_customer', class: 'Form Form--spacingTight', id: 'create_customer' -%}
+        <header class="Form__Header">
+          <h1 class="Form__Title Heading u-h1">{{ 'customer.register.title' | t }}</h1>
+          <p class="Form__Legend">{{ 'customer.register.description' | t }}</p>
+        </header>
+
+        {%- if form.errors -%}
+          <div class="Form__Alert Alert Alert--error">
+            <ul class="Alert__ErrorList">
+              {%- for field in form.errors -%}
+                {%- if field == 'form' -%}
+                  <li class="Alert__ErrorItem">{{ form.errors.messages[field] }}</li>
+                {%- else -%}
+                  <li class="Alert__ErrorItem"><strong>{{ form.errors.translated_fields[field] }}</strong> {{ form.errors.messages[field] }}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if request.locale.iso_code == 'ja' -%}
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[last_name]" aria-label="{{ 'customer.register.last_name' | t }}" placeholder="{{ 'customer.register.last_name' | t }}">
+            <label class="Form__FloatingLabel">{{ 'customer.register.last_name' | t }}</label>
+          </div>
+
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[first_name]" aria-label="{{ 'customer.register.first_name' | t }}" placeholder="{{ 'customer.register.first_name' | t }}" autofocus>
+            <label class="Form__FloatingLabel">{{ 'customer.register.first_name' | t }}</label>
+          </div>
+        {%- else -%}
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[first_name]" aria-label="{{ 'customer.register.first_name' | t }}" placeholder="{{ 'customer.register.first_name' | t }}" autofocus>
+            <label class="Form__FloatingLabel">{{ 'customer.register.first_name' | t }}</label>
+          </div>
+
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[last_name]" aria-label="{{ 'customer.register.last_name' | t }}" placeholder="{{ 'customer.register.last_name' | t }}">
+            <label class="Form__FloatingLabel">{{ 'customer.register.last_name' | t }}</label>
+          </div>
+        {%- endif -%}
+
+        <div class="Form__Item">
+          <input type="email" class="Form__Input" name="customer[email]" aria-label="{{ 'customer.register.email' | t }}" placeholder="{{ 'customer.register.email' | t }}" required="required">
+          <label class="Form__FloatingLabel">{{ 'customer.register.email' | t }}</label>
+        </div>
+
+        <div class="Form__Item">
+          <input type="password" class="Form__Input" name="customer[password]" aria-label="{{ 'customer.register.password' | t }}" placeholder="{{ 'customer.register.password' | t }}" required="required">
+          <label class="Form__FloatingLabel">{{ 'customer.register.password' | t }}</label>
+        </div>
+
+        <button type="submit" class="Form__Submit Button Button--primary Button--full">{{ 'customer.register.submit' | t }}</button>
+<button type="submit"class="cancel">Cancel</button>      
+{%- endform -%}
+
+    </div>
+  </div>
+</section>
+<!-- <span class="popup-close"></span> -->
+</div>
+<body onload="checkCookie()"></body>
+<!-- Coded by jotting.com -->
+{{ 'popup.js' | asset_url | script_tag }}
+</div>
+
+
+
+<script>
+
+  document.querySelector(".popup-btn").addEventListener('click', function (e) {
+e.stopPropagation();
+document.querySelector(".popup").style.display = 'block';
+}, false);
+document.querySelector(".popup-btn").addEventListener('click', function () {
+document.querySelector(".popup-overlay").style.display = 'block';
+}, false);
+
+
+document.querySelector(".popup").addEventListener('click', function (e) {
+e.stopPropagation();
+}, false);
+</script>
+<style>
+.popup {
+background-color: #fff;
+border-radius: 8px;
+padding: 50px 30px;
+box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+position: absolute;
+z-index: 25;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+max-width: 450px !important;
+display: none;
+width: 95%;
+}
+@media only screen and (max-width: 767px) {
+.popup {
+padding: 35px 15px;
+}
+}
+.popup-close:after {
+width: 30px;
+content: '╳';
+position: fixed;
+right: 10px;
+top: 10px;
+font-size: 20px;
+line-height: 30px;
+cursor: pointer;
+}
+.popup-btn {
+cursor: pointer;
+}
+.popup-overlay {
+position: fixed;
+height: 100%;
+width: 100% !important;
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+background: rgba(0, 0, 0, 0.6);
+display: none;
+z-index: 100;
+} </style>
+
+
+
+theme.js==============
+<script>
+
+
+
+      $(document).ready(function(){
+$(".popup-btn").trigger("click");
+
+$(".button-custom").click(function(){
+  $(".popup-custom").show();
+  $(".login_form").hide();
+
+});
+$(".cancel").click(function(){
+  $(".login_form").show();
+  $(".popup-custom").hide();
+
+});
+      
+          
+       
+        //alert("hello");
+      
+      });
+    </script> 
